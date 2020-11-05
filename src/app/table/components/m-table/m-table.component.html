@@ -1,1 +1,16 @@
-<table></table>
+<table>
+  <thead>
+    <tr>
+      <ng-container *ngFor="let column of columns">
+        <ng-container *ngIf="column.title">
+          <th>
+            {{ column.title }}
+          </th>
+        </ng-container>
+      </ng-container>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-content></ng-content>
+  </tbody>
+</table>

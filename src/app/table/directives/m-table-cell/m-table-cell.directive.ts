@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, Input, TemplateRef } from '@angular/core';
 
 @Directive({
   selector: '[mTableCell]',

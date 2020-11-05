@@ -1,0 +1,13 @@
+table {
+    margin-left: 50%;
+    transform: translateX(-50%);
+    border-top: 1px dashed green;
+    border-left: 1px dashed green;
+    border-collapse: collapse;
+
+    th, td {
+        padding: 10px;
+        border-bottom: 1px dashed green;
+        border-right: 1px dashed green;
+    }
+}

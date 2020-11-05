@@ -13,6 +13,6 @@ import { AppComponent } from './app.component';
     TableModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

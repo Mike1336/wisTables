@@ -2,18 +2,23 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { MTableComponent } from './components/m-table/m-table.component';
-import { MTableColumnComponent } from './components/m-table-column/m-table-column.component';
 import { MTableCellDirective } from './directives/m-table-cell/m-table-cell.directive';
+import { MTableColumnDirective } from './directives/m-table-column/m-table-column.directive';
 
 
 @NgModule({
   declarations: [
     MTableComponent,
-    MTableColumnComponent,
     MTableCellDirective,
+    MTableColumnDirective,
   ],
   imports: [
     CommonModule,
   ],
+  exports: [
+    MTableComponent,
+    MTableCellDirective,
+    MTableColumnDirective,
+  ],
 })
-export class TableModule { }
+export class TableModule {}
