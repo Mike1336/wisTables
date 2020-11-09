@@ -1,12 +1,26 @@
-<m-table [config]="config">
-  <m-table-column title="колонка 1">
-    <ng-template mTableCell>
-      test
-    </ng-template>
-  </m-table-column>
-  <m-table-column title="колонка 2">
-    <ng-template mTableCell>
-      <p>test 2</p>
-    </ng-template>
-  </m-table-column>
-</m-table>
+<div id="tableWithPaginator">
+  <m-table [config]="config">
+    <m-table-column>
+      <ng-template mTableCell let-phone>
+        {{ phone.id }}
+      </ng-template>
+    </m-table-column>
+    <m-table-column>
+      <ng-template mTableColumnTitle>
+        <h1>Name</h1>
+      </ng-template>
+      <ng-template mTableCell let-phone>
+        {{ phone.name }}
+      </ng-template>
+    </m-table-column>
+    <m-table-column>
+      <ng-template mTableColumnTitle>
+        <h2>Brand</h2>
+      </ng-template>
+      <ng-template mTableCell let-phone>
+        {{ phone.brand }}
+      </ng-template>
+    </m-table-column>
+  </m-table>
+  <m-table-paginator [config]="paging" (limitChanged)="changeLimit($event)" (pageSwitched)="changePage($event)"></m-table-paginator>
+</div>

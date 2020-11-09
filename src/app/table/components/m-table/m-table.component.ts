@@ -1,34 +1,25 @@
-import { Component, Input, OnInit, ContentChildren, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, ContentChildren, QueryList, ChangeDetectionStrategy } from '@angular/core';
 
-import { IMTableConfig } from '../../interfaces/config';
-
+import { IResponseFormat } from './../../interfaces/response-format';
 import { MTableColumnDirective } from './../../directives/m-table-column/m-table-column.directive';
 
 @Component({
   selector: 'm-table',
   templateUrl: './m-table.component.html',
   styleUrls: ['./m-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MTableComponent implements OnInit, AfterViewInit {
+export class MTableComponent implements OnInit {
 
   @Input()
-  public config: IMTableConfig;
+  public config: IResponseFormat;
 
   @ContentChildren(MTableColumnDirective)
-  public columns: MTableColumnDirective;
+  public columns: QueryList<MTableColumnDirective>;
 
   constructor() { }
 
   public ngOnInit(): void {
-  }
-
-  public ngAfterViewInit(): void {
-    console.log(this.columns);
-  }
-
-  public fetchDataCheck(): void {
-    const data = this.config.fetch();
-    data.subscribe(console.log)
   }
 
 }

@@ -1,9 +1,9 @@
 import { Directive, TemplateRef } from '@angular/core';
 
 @Directive({
-  selector: '[mTableCell]',
+  selector: '[mTableColumnTitle]',
 })
-export class MTableCellDirective {
+export class MTableColumnTitleDirective {
 
   constructor(public templateRef: TemplateRef<unknown>) {}
 

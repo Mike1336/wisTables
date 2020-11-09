@@ -1,0 +1,19 @@
+<div>
+  <div id="pagManage">
+    <p>Phones per page:</p>
+    <select #limitSelector (change)="changeLimit()">
+      <option [value]="config.limit" selected>{{ config.limit }}</option>
+      <ng-container *ngFor="let limit of limits">
+        <ng-container *ngIf="limit !== config.limit">
+          <option [value]="limit">{{ limit }}</option>
+        </ng-container>
+      </ng-container>
+    </select>
+    <span class="icon-arrow-left2" (click)="decreasePageNumber()"></span>
+    <p>
+      {{ config.offset + 1 }} - {{ config.offset + config.limit }} of
+      {{ config.records }}
+    </p>
+    <span class="icon-arrow-right2" (click)="increasePageNumber()"></span>
+  </div>
+</div>

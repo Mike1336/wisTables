@@ -2,15 +2,30 @@
   <thead>
     <tr>
       <ng-container *ngFor="let column of columns">
-        <ng-container *ngIf="column.title">
+        <ng-container *ngIf="column.title; else emptyTitle">
           <th>
-            {{ column.title }}
+            <ng-template [ngTemplateOutlet]="column.title"> </ng-template>
           </th>
         </ng-container>
+        <ng-template #emptyTitle>
+          <th></th>
+        </ng-template>
       </ng-container>
     </tr>
   </thead>
   <tbody>
-    <ng-content></ng-content>
+    <ng-container *ngFor="let phone of config.data">
+      <tr>
+        <ng-container *ngFor="let column of columns">
+          <td>
+            <ng-template
+              [ngTemplateOutlet]="column.templateRef"
+              [ngTemplateOutletContext]="{ $implicit: phone }"
+            >
+            </ng-template>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-container>
   </tbody>
 </table>

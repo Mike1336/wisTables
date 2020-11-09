@@ -1,23 +1,27 @@
-import { ContentChild, Directive, Input, OnInit } from '@angular/core';
+import { ContentChild, Directive } from '@angular/core';
 
+import { MTableColumnTitleDirective } from '../m-table-column-title/m-table-column-title.directive';
 import { MTableCellDirective } from '../m-table-cell/m-table-cell.directive';
 
 @Directive({
   selector: 'm-table-column',
 })
-export class MTableColumnDirective implements OnInit {
+export class MTableColumnDirective {
 
-  @Input()
-  public title: string;
+  @ContentChild(MTableColumnTitleDirective)
+  public columnTitle: MTableColumnTitleDirective;
 
-  @ContentChild(MTableCellDirective, { static: true })
+  @ContentChild(MTableCellDirective)
   public tableRow: MTableCellDirective;
-
 
   constructor() { }
 
-  public ngOnInit(): void {
-    console.log(this.tableRow);
+  public get templateRef(): unknown {
+    return this.tableRow.templateRef;
+  }
+
+  public get title(): unknown {
+    return this.columnTitle?.templateRef;
   }
 
 }
