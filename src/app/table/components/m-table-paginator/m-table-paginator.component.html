@@ -9,11 +9,19 @@
         </ng-container>
       </ng-container>
     </select>
-    <span class="icon-arrow-left2" (click)="decreasePageNumber()"></span>
+    <span
+      class="icon-arrow-left2"
+      [ngClass]="{ 'active': currentPage > 1 }"
+      (click)="decreasePageNumber()"
+    ></span>
     <p>
-      {{ config.offset + 1 }} - {{ config.offset + config.limit }} of
-      {{ config.records }}
+      {{ currentPage }} /
+      {{ pages }}
     </p>
-    <span class="icon-arrow-right2" (click)="increasePageNumber()"></span>
+    <span
+      class="icon-arrow-right2"
+      [ngClass]="{ 'active': (currentPage + 1) <= pages }"
+      (click)="increasePageNumber()"
+    ></span>
   </div>
 </div>

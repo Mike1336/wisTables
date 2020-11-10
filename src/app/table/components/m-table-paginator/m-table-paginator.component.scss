@@ -6,8 +6,8 @@ div {
     span {
         cursor: pointer;
         font-size: 20px;
-        color: green;
         height: max-content;
+        color: grey;
     }
     
     #pagManage {
@@ -15,4 +15,7 @@ div {
         justify-content: space-between;
         align-items: center;
     }
+}
+.active {
+    color: green !important;
 }

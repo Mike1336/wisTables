@@ -1,11 +1,25 @@
-table {
-    border-top: 1px dashed green;
-    border-left: 1px dashed green;
-    border-collapse: collapse;
+div {
+  width: max-content;
+  margin-left: 50%;
+  transform: translateX(-50%);
 
-    th, td {
-        padding: 10px;
-        border-bottom: 1px dashed green;
-        border-right: 1px dashed green;
+  table {
+    border-collapse: collapse;
+    border-bottom: 1px dashed green;
+
+    th,
+    td {
+      padding: 10px;
     }
+
+    tbody {
+      tr:hover {
+        background-color: rgba(0, 128, 0, 0.226);
+        transition: .3s;
+      }
+    }
+  }
+  m-table-paginator {
+    width: 100%;
+  }
 }

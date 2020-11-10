@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 
+import { PagTableService } from './../../services/pag-table.service';
 import { IResponsePaging } from './../../interfaces/response-format';
 
 @Component({
@@ -8,50 +9,63 @@ import { IResponsePaging } from './../../interfaces/response-format';
   styleUrls: ['./m-table-paginator.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MTablePaginatorComponent implements OnInit {
+
+export class MTablePaginatorComponent implements OnInit, OnChanges {
 
   @Input()
   public config: IResponsePaging;
 
-  @Output()
-  public limitChanged = new EventEmitter<string>();
-
-  @Output()
-  public pageSwitched = new EventEmitter<any>();
-
   public limits = [1, 5, 10];
+
+  public pages: number;
+  public currentPage = 1;
 
   @ViewChild('limitSelector')
   public limitSelector;
 
-  constructor() {}
+  constructor(private pagTableService: PagTableService) {}
 
   public ngOnInit(): void {
   }
 
+  public ngOnChanges(): void {
+    this.pages = Math.ceil(this.config.records / this.config.limit);
+  }
+
   public changeLimit(): void {
-    this.limitChanged.emit(this.limitSelector.nativeElement.value);
+    const newLimit = +this.limitSelector.nativeElement.value;
+
+    this.currentPage = 1;
+
+    this.pagTableService.setPagData(
+      {
+        page: this.currentPage,
+        pageSize: newLimit,
+      },
+      );
   }
 
   public decreasePageNumber(): void {
-    if (!(this.config.offset - this.config.limit < 0)) {
-      this.pageSwitched.emit(
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.pagTableService.setPagData(
         {
-          offset: this.config.offset - this.config.limit,
-          limit: this.config.limit,
+          page: this.currentPage,
+          pageSize: this.config.limit,
         },
         );
     }
   }
 
   public increasePageNumber(): void {
-    if (!(this.config.offset + this.config.limit >= this.config.records)) {
-      this.pageSwitched.emit(
+    if ((this.currentPage + 1) <= this.pages) {
+      this.currentPage++;
+      this.pagTableService.setPagData(
         {
-          offset: this.config.offset + this.config.limit,
-          limit: this.config.limit,
+          page: this.currentPage,
+          pageSize: this.config.limit,
         },
-        );
+      );
     }
   }
 

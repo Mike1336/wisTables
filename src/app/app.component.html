@@ -1,4 +1,3 @@
-<div id="tableWithPaginator">
   <m-table [config]="config">
     <m-table-column>
       <ng-template mTableCell let-phone>
@@ -7,7 +6,7 @@
     </m-table-column>
     <m-table-column>
       <ng-template mTableColumnTitle>
-        <h1>Name</h1>
+        <i><b>Name</b></i>
       </ng-template>
       <ng-template mTableCell let-phone>
         {{ phone.name }}
@@ -15,12 +14,18 @@
     </m-table-column>
     <m-table-column>
       <ng-template mTableColumnTitle>
-        <h2>Brand</h2>
+        <i><b>Brand</b></i>
       </ng-template>
       <ng-template mTableCell let-phone>
-        {{ phone.brand }}
+        <i>{{ phone.brand }}</i>
+      </ng-template>
+    </m-table-column>
+    <m-table-column>
+      <ng-template mTableColumnTitle>
+        <i><b>Price</b></i>
+      </ng-template>
+      <ng-template mTableCell let-phone>
+        <b>{{ phone.price }} ₽</b>
       </ng-template>
     </m-table-column>
   </m-table>
-  <m-table-paginator [config]="paging" (limitChanged)="changeLimit($event)" (pageSwitched)="changePage($event)"></m-table-paginator>
-</div>
