@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { IConfigFormat, IQueryParams } from './table/interfaces/response-format';
+import { Pagination } from './table/pagination/pagination';
 import { PhoneStoreService } from './table/services/phone-store.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class AppComponent implements OnInit {
 
   public title = 'wis-tables';
 
-  public config: IConfigFormat ;
+  public config: IConfigFormat;
 
   constructor(private phoneStoreService: PhoneStoreService) {
   }
@@ -23,7 +24,12 @@ export class AppComponent implements OnInit {
       fetch: (query: IQueryParams) => {
         return this.phoneStoreService.getPhones(query);
       },
-      pagination: true,
+      pagination: new Pagination(
+        {
+          limits: [1, 2, 5, 10, 12],
+          pageSize: 10,
+        },
+      ),
     };
   }
 

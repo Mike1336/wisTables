@@ -1,14 +1,15 @@
+
 import { Injectable } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 import { IResponseFormat } from '../interfaces/response-format';
 
 import { IQueryParams } from './../interfaces/response-format';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
+
 export class PhoneStoreService {
 
   private tableData = [
@@ -78,11 +79,15 @@ export class PhoneStoreService {
       brand: 'Apple',
       price: 79999,
     },
+    {
+      id: 12,
+      name: 'Apple iPhone 12 Pro Max',
+      brand: 'Apple',
+      price: 99999,
+    },
   ];
 
-  constructor() { }
-
-  public getPhones(query?: IQueryParams): Observable<IResponseFormat> {
+  public getPhones(query: IQueryParams): Observable<IResponseFormat> {
     const limit = query.pageSize;
     const offset = (limit * query.page) - limit;
 
@@ -96,6 +101,9 @@ export class PhoneStoreService {
         offset,
       },
     });
+    // .pipe(
+    //   delay(1000),
+    // );
   }
 
 }

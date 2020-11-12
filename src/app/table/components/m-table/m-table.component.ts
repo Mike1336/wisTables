@@ -13,12 +13,7 @@ import { ReplaySubject } from 'rxjs';
 
 import { PagTableService } from './../../services/pag-table.service';
 import { IPhoneData } from './../../interfaces/phone-data';
-import {
-  IConfigFormat,
-  IQueryParams,
-  IResponseFormat,
-  IResponsePaging
-} from './../../interfaces/response-format';
+import { IConfigFormat } from './../../interfaces/response-format';
 import { MTableColumnDirective } from './../../directives/m-table-column/m-table-column.directive';
 
 @Component({
@@ -37,41 +32,30 @@ export class MTableComponent implements OnInit, OnDestroy {
 
   public phones: IPhoneData[];
 
-  public paging: IResponsePaging;
-
-  private $destroy = new ReplaySubject<number>(1);
+  private _destroy$ = new ReplaySubject<number>(1);
 
   constructor(private pagTableService: PagTableService) { }
 
   public ngOnInit(): void {
-    this.getData({ page: 1, pageSize: 5 });
-    this.trackPagChanges();
+    this.listenData();
+    this.pagTableService.setConfig(this.config);
+    this.pagTableService.initData();
   }
 
   public ngOnDestroy(): void {
-    this.$destroy.next(null);
-    this.$destroy.complete();
+    this._destroy$.next(null);
+    this._destroy$.complete();
   }
 
-  public getData(query: IQueryParams): void {
-    this.config.fetch(query).pipe(
-      takeUntil(this.$destroy),
-    )
-      .subscribe((response: IResponseFormat) => {
-        this.phones = response.data;
-        this.paging = response.paging;
-      });
-  }
-
-  public trackPagChanges(): void {
-    this.pagTableService.$paging
+  public listenData(): void {
+    this.pagTableService.getDataFromFetch$()
       .pipe(
-        takeUntil(this.$destroy),
+        takeUntil(this._destroy$),
       )
       .subscribe(
-          (newPagData: IQueryParams) => {
-            this.getData(newPagData);
-          },
+        (data: IPhoneData[]) => {
+          this.phones = data;
+        },
       );
   }
 

@@ -1,7 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { IQueryParams } from './../../interfaces/response-format';
 import { PagTableService } from './../../services/pag-table.service';
-import { IResponsePaging } from './../../interfaces/response-format';
 
 @Component({
   selector: 'm-table-paginator',
@@ -10,26 +13,41 @@ import { IResponsePaging } from './../../interfaces/response-format';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class MTablePaginatorComponent implements OnInit, OnChanges {
+export class MTablePaginatorComponent implements OnInit, OnDestroy {
 
-  @Input()
-  public config: IResponsePaging;
-
-  public limits = [1, 5, 10];
-
-  public pages: number;
   public currentPage = 1;
+  public pageSize: number;
+  public pages: number;
+  public limits: number[];
 
   @ViewChild('limitSelector')
   public limitSelector;
 
+  private _destroy$ = new ReplaySubject<number>(1);
+
   constructor(private pagTableService: PagTableService) {}
 
   public ngOnInit(): void {
+    this.getParams();
   }
 
-  public ngOnChanges(): void {
-    this.pages = Math.ceil(this.config.records / this.config.limit);
+  public ngOnDestroy(): void {
+    this._destroy$.next(null);
+    this._destroy$.complete();
+  }
+
+  public getParams(): void {
+    this.pagTableService.getPagingData$()
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(
+        (params: IQueryParams) => {
+          this.pages = params.pages;
+          this.pageSize = params.pageSize;
+          this.limits = params.limits;
+        },
+      );
   }
 
   public changeLimit(): void {
@@ -37,7 +55,7 @@ export class MTablePaginatorComponent implements OnInit, OnChanges {
 
     this.currentPage = 1;
 
-    this.pagTableService.setPagData(
+    this.pagTableService.changePagParams(
       {
         page: this.currentPage,
         pageSize: newLimit,
@@ -48,10 +66,10 @@ export class MTablePaginatorComponent implements OnInit, OnChanges {
   public decreasePageNumber(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.pagTableService.setPagData(
+      this.pagTableService.changePagParams(
         {
           page: this.currentPage,
-          pageSize: this.config.limit,
+          pageSize: this.pageSize,
         },
         );
     }
@@ -60,10 +78,10 @@ export class MTablePaginatorComponent implements OnInit, OnChanges {
   public increasePageNumber(): void {
     if ((this.currentPage + 1) <= this.pages) {
       this.currentPage++;
-      this.pagTableService.setPagData(
+      this.pagTableService.changePagParams(
         {
           page: this.currentPage,
-          pageSize: this.config.limit,
+          pageSize: this.pageSize,
         },
       );
     }

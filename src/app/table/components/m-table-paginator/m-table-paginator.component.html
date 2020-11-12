@@ -2,9 +2,9 @@
   <div id="pagManage">
     <p>Phones per page:</p>
     <select #limitSelector (change)="changeLimit()">
-      <option [value]="config.limit" selected>{{ config.limit }}</option>
+      <option [value]="pageSize" selected>{{ pageSize }}</option>
       <ng-container *ngFor="let limit of limits">
-        <ng-container *ngIf="limit !== config.limit">
+        <ng-container *ngIf="limit !== pageSize">
           <option [value]="limit">{{ limit }}</option>
         </ng-container>
       </ng-container>

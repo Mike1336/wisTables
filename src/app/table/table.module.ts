@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { PhoneStoreService } from './services/phone-store.service';
+import { PagTableService } from './services/pag-table.service';
 import { MTableComponent } from './components/m-table/m-table.component';
 import { MTableCellDirective } from './directives/m-table-cell/m-table-cell.directive';
 import { MTableColumnDirective } from './directives/m-table-column/m-table-column.directive';
@@ -24,6 +26,10 @@ import { MTablePaginatorComponent } from './components/m-table-paginator/m-table
     MTableColumnDirective,
     MTableColumnTitleDirective,
     MTablePaginatorComponent,
+  ],
+  providers: [
+    PagTableService,
+    PhoneStoreService,
   ],
 })
 export class TableModule {}
