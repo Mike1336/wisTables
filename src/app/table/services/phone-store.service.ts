@@ -100,10 +100,10 @@ export class PhoneStoreService {
         limit,
         offset,
       },
-    });
-    // .pipe(
-    //   delay(1000),
-    // );
+    })
+    .pipe(
+      delay(1000),
+    );
   }
 
 }

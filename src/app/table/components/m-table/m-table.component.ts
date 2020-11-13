@@ -5,7 +5,8 @@ import {
   ContentChildren,
   QueryList,
   ChangeDetectionStrategy,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { takeUntil } from 'rxjs/operators';
@@ -34,12 +35,18 @@ export class MTableComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new ReplaySubject<number>(1);
 
-  constructor(private pagTableService: PagTableService) { }
+  constructor(
+    private _pagTableService: PagTableService,
+    private _cdRef: ChangeDetectorRef,
+    ) { }
+
+  public get data$(): any {
+    return this._pagTableService.dataFromFetch$;
+  }
 
   public ngOnInit(): void {
-    this.listenData();
-    this.pagTableService.setConfig(this.config);
-    this.pagTableService.initData();
+    // this.listenData();
+    this._pagTableService.setConfig(this.config);
   }
 
   public ngOnDestroy(): void {
@@ -47,16 +54,18 @@ export class MTableComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  public listenData(): void {
-    this.pagTableService.getDataFromFetch$()
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(
-        (data: IPhoneData[]) => {
-          this.phones = data;
-        },
-      );
-  }
+  // public listenData(): void {
+  //   this._pagTableService.dataFromFetch$
+  //     .pipe(
+  //       takeUntil(this._destroy$),
+  //     )
+  //     .subscribe(
+  //       (data: IPhoneData[]) => {
+  //         debugger;
+  //         // this.phones = data;
+  //         // this._cdRef.markForCheck();
+  //       },
+  //     );
+  // }
 
 }

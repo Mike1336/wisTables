@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs';
 
-import { Pagination } from './../pagination/pagination';
 import { IPhoneData } from './phone-data';
 
 export interface IResponseFormat {
@@ -27,10 +26,12 @@ export interface IQueryParams {
 
 export interface IConfigFormat {
   fetch: (parameters: IQueryParams) => Observable<IResponseFormat>;
-  pagination?: Pagination;
+  pagination?: ConfigTablePagination;
 }
 
 export interface IConfigTablePagination {
   limits?: number[];
   pageSize?: number;
 }
+
+export type ConfigTablePagination = boolean | IConfigTablePagination;
