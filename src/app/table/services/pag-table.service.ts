@@ -41,38 +41,12 @@ export class PagTableService implements OnDestroy {
   public setConfig(value: IConfigFormat): void {
     this._config = value;
     this.init();
-    
     this._fetch$.next();
   }
 
-  // public setData(data: IPhoneData[]): void {
-  //   // this._dataOfFetch$.next(data);
-  // }
-
   public init(): void {
     this.initPaginator(this._config.pagination);
-    
-    // this._fetch$.next();
-
-    // this._config.fetch(
-    //   {
-    //     page: 1,
-    //     pageSize: this.paginator?.pageSize ?? 1,
-    //   })
-      
-    //   .subscribe(
-    //     (data: IResponseFormat) => {
-    //       this.updateData(data);
-    //     },
-    //   );
   }
-
-  // public updateData(data: IResponseFormat): void {
-  //   this.setData(data.data);
-  //   if (this._paginator) {
-  //     this._paginator.updatePagInfo(data.paging);
-  //   }
-  // }
 
   public initPaginator(params?: ConfigTablePagination): void {
     if (params) {
@@ -114,7 +88,7 @@ export class PagTableService implements OnDestroy {
         ),
         takeUntil(this.destroy$),
       )
-      .subscribe((response: any) => {
+      .subscribe((response: IResponseFormat) => {
         this._dataOfFetch$.next(response.data);
         this.paginator.updatePagInfo(response.paging);
       });

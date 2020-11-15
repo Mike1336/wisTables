@@ -6,11 +6,9 @@ import {
   QueryList,
   ChangeDetectionStrategy,
   OnDestroy,
-  ChangeDetectorRef
 } from '@angular/core';
 
-import { takeUntil } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 
 import { PagTableService } from './../../services/pag-table.service';
 import { IPhoneData } from './../../interfaces/phone-data';
@@ -31,21 +29,15 @@ export class MTableComponent implements OnInit, OnDestroy {
   @ContentChildren(MTableColumnDirective)
   public columns: QueryList<MTableColumnDirective>;
 
-  public phones: IPhoneData[];
-
   private _destroy$ = new ReplaySubject<number>(1);
 
-  constructor(
-    private _pagTableService: PagTableService,
-    private _cdRef: ChangeDetectorRef,
-    ) { }
+  constructor(private _pagTableService: PagTableService) { }
 
-  public get data$(): any {
+  public get data$(): Observable<IPhoneData[]> {
     return this._pagTableService.dataFromFetch$;
   }
 
   public ngOnInit(): void {
-    // this.listenData();
     this._pagTableService.setConfig(this.config);
   }
 
@@ -53,19 +45,5 @@ export class MTableComponent implements OnInit, OnDestroy {
     this._destroy$.next(null);
     this._destroy$.complete();
   }
-
-  // public listenData(): void {
-  //   this._pagTableService.dataFromFetch$
-  //     .pipe(
-  //       takeUntil(this._destroy$),
-  //     )
-  //     .subscribe(
-  //       (data: IPhoneData[]) => {
-  //         debugger;
-  //         // this.phones = data;
-  //         // this._cdRef.markForCheck();
-  //       },
-  //     );
-  // }
 
 }

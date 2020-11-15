@@ -12,7 +12,7 @@ export class Pagination {
   private _currentPage = 1;
   private _limits: number[];
 
-  constructor(info?: any) {
+  constructor(info?: IConfigTablePagination) {
     this._limits = info?.limits ?? [1, 5, 10];
     this._limit = info?.pageSize ?? 1;
   }
@@ -25,7 +25,7 @@ export class Pagination {
     return {
       page: this.currentPage,
       pageSize: this.pageSize,
-    }
+    };
   }
 
   public get pageSize(): number {
