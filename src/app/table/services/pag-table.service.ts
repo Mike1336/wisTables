@@ -40,15 +40,11 @@ export class PagTableService implements OnDestroy {
 
   public setConfig(value: IConfigFormat): void {
     this._config = value;
-    this.init();
+    this._initPaginator(this._config.pagination);
     this._fetch$.next();
   }
 
-  public init(): void {
-    this.initPaginator(this._config.pagination);
-  }
-
-  public initPaginator(params?: ConfigTablePagination): void {
+  private _initPaginator(params?: ConfigTablePagination): void {
     if (params) {
       let parameters;
 
@@ -57,12 +53,12 @@ export class PagTableService implements OnDestroy {
       : parameters = params;
 
       this._paginator = new Pagination(parameters);
-      this.listenPagChanges();
+      this._listenPagChanges();
     }
   }
 
-  public listenPagChanges(): void {
-    this._paginator?.changes$
+  private _listenPagChanges(): void {
+    this._paginator?.change$
       .pipe(
         takeUntil(this.destroy$),
       )

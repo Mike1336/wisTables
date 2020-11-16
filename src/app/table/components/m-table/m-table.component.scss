@@ -14,7 +14,7 @@ div {
     tbody {
       tr:hover {
         background-color: rgba(0, 128, 0, 0.226);
-        transition: .3s;
+        transition: 0.3s;
       }
     }
   }
@@ -22,6 +22,8 @@ div {
     width: 100%;
   }
 }
+
 .withPaginator {
   border-bottom: 1px dashed green;
 }
+

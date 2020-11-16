@@ -27,6 +27,7 @@ export interface IQueryParams {
 export interface IConfigFormat {
   fetch: (parameters: IQueryParams) => Observable<IResponseFormat>;
   pagination?: ConfigTablePagination;
+  actions?: IConfigTableAction[];
 }
 
 export interface IConfigTablePagination {
@@ -35,3 +36,8 @@ export interface IConfigTablePagination {
 }
 
 export type ConfigTablePagination = boolean | IConfigTablePagination;
+
+export interface IConfigTableAction {
+  label: string;
+  click: (row: IPhoneData) => void;
+}

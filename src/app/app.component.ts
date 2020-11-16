@@ -27,6 +27,26 @@ export class AppComponent implements OnInit {
         limits: [1, 2, 5, 10, 12],
         pageSize: 10,
       },
+      actions: [
+        {
+          label: 'Move',
+          click: (row) => {
+            console.log('Row Move', row);
+          },
+        },
+        {
+          label: 'Edit',
+          click: (row) => {
+            console.log('Row Edit', row);
+          },
+        },
+        {
+          label: 'Delete',
+          click: (row) => {
+            console.log('Row Delete', row);
+          },
+        },
+      ],
     };
   }
 

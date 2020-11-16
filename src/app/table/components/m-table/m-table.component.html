@@ -1,6 +1,5 @@
 <div>
-
-  <table [ngClass]="{'withPaginator': config.pagination}">
+  <table [ngClass]="{ withPaginator: config.pagination }">
     <thead>
       <tr>
         <ng-container *ngFor="let column of columns">
@@ -26,6 +25,9 @@
               >
               </ng-template>
             </td>
+          </ng-container>
+          <ng-container *ngIf="config.actions">
+            <m-table-row-actions [row]="phone" [actions]="config.actions"></m-table-row-actions>
           </ng-container>
         </tr>
       </ng-container>

@@ -4,9 +4,9 @@ import { IConfigTablePagination, IQueryParams, IResponsePaging } from './../inte
 
 export class Pagination {
 
-  private _changes$ = new Subject<IQueryParams>();
+  private _change$ = new Subject<IQueryParams>();
 
-  private _records: number;
+  private _records = 0;
   private _limit: number;
   private _offset: number;
   private _currentPage = 1;
@@ -17,8 +17,8 @@ export class Pagination {
     this._limit = info?.pageSize ?? 1;
   }
 
-  public get changes$(): Observable<IQueryParams> {
-    return this._changes$.asObservable();
+  public get change$(): Observable<IQueryParams> {
+    return this._change$.asObservable();
   }
 
   public get query(): any {
@@ -53,12 +53,14 @@ export class Pagination {
     this._records = info.records;
     this._limit = info.limit;
     this._offset = info.offset;
+
+    this.changeCurrentPage(this.currentPage);
   }
 
   public changeCurrentPage(value: number): void {
     this._currentPage = value;
 
-    this._changes$.next({
+    this._change$.next({
       page: this._currentPage,
       pageSize: this._limit,
       pages: this.pages,

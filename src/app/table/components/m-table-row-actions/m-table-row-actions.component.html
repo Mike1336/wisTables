@@ -1,0 +1,14 @@
+<td>
+  <div ngbDropdown placement="right" class="d-inline-block">
+    <button class="btn btn-outline-success" ngbDropdownToggle>
+      <span class="icon-cog"></span>
+    </button>
+    <div ngbDropdownMenu class="shadow-lg p-3 mb-5 bg-white rounded">
+      <ng-container *ngFor="let action of actions">
+        <button class="btn btn-success" ngbDropdownItem (click)="handleClick(action)">
+          {{ action.label }}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</td>

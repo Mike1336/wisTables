@@ -29,6 +29,8 @@ export class MTableComponent implements OnInit, OnDestroy {
   @ContentChildren(MTableColumnDirective)
   public columns: QueryList<MTableColumnDirective>;
 
+  public showOptions: boolean;
+
   private _destroy$ = new ReplaySubject<number>(1);
 
   constructor(private _pagTableService: PagTableService) { }

@@ -1,0 +1,39 @@
+td {
+  position: relative;
+  padding: 10px;
+
+  span {
+    cursor: pointer;
+  }
+}
+
+.options {
+    position: absolute;
+    left: 55px;
+    top: -23px;
+    border: 1px solid #0080000d;
+    box-shadow: 0px 0px 4px 0px #49821d;
+    transition: .5s;
+  
+    p {
+      cursor: pointer;
+      text-align: center;
+      margin: 0;
+      padding: 5px;
+    }
+  
+    p:hover {
+      background-color: rgba(0, 128, 0, 0.226);
+      transition: 0.3s;
+    }
+  }
+
+  .options::before {
+    content: "";
+    position: absolute;
+    top: 36%;
+    left: -18px;
+    border-width: 10px 15px 10px 0;
+    border-style: solid;
+    border-color: transparent #48811b5c transparent transparent;
+  }
