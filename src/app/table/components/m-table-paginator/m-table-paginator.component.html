@@ -3,11 +3,11 @@
     <div id="pageLimit">
       <p>Phones per page:</p>
       <select #limitSelector (change)="onSelectorChange()" class="custom-select border border-success">
-        <option [value]="paginator.pageSize" selected>
-          {{ paginator.pageSize }}
+        <option [value]="instance.pageSize" selected>
+          {{ instance.pageSize }}
         </option>
-        <ng-container *ngFor="let limit of paginator.limits">
-          <ng-container *ngIf="limit !== paginator.pageSize">
+        <ng-container *ngFor="let limit of instance.limits">
+          <ng-container *ngIf="limit !== instance.pageSize">
             <option [value]="limit">{{ limit }}</option>
           </ng-container>
         </ng-container>
@@ -16,17 +16,17 @@
     <div id="pagingArrows">
       <span
         class="icon-arrow-left2"
-        [ngClass]="{ active: paginator.currentPage > 1 }"
-        (click)="paginator.decrease()"
+        [ngClass]="{ active: instance.currentPage > 1 }"
+        (click)="instance.decrease()"
       ></span>
       <p>
-        {{ paginator.currentPage }} /
-        {{ paginator.pages }}
+        {{ instance.currentPage }} /
+        {{ instance.pages }}
       </p>
       <span
         class="icon-arrow-right2"
-        [ngClass]="{ active: paginator.currentPage + 1 <= paginator.pages }"
-        (click)="paginator.increase()"
+        [ngClass]="{ active: instance.currentPage + 1 <= instance.pages }"
+        (click)="instance.increase()"
       ></span>
     </div>
   </div>

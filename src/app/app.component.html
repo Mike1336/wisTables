@@ -5,7 +5,7 @@
       </ng-template>
     </m-table-column>
     <m-table-column>
-      <ng-template mTableColumnTitle>
+      <ng-template mTableColumnTitle="Name">
         <i><b>Name</b></i>
       </ng-template>
       <ng-template mTableCell let-phone>
@@ -13,7 +13,7 @@
       </ng-template>
     </m-table-column>
     <m-table-column>
-      <ng-template mTableColumnTitle>
+      <ng-template mTableColumnTitle="Brand" [sort]="true">
         <i><b>Brand</b></i>
       </ng-template>
       <ng-template mTableCell let-phone>
@@ -21,7 +21,7 @@
       </ng-template>
     </m-table-column>
     <m-table-column>
-      <ng-template mTableColumnTitle>
+      <ng-template mTableColumnTitle="Price" [sort]="true">
         <i><b>Price</b></i>
       </ng-template>
       <ng-template mTableCell let-phone>

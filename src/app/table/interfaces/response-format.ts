@@ -26,6 +26,7 @@ export interface IQueryParams {
 
 export interface IConfigFormat {
   fetch: (parameters: IQueryParams) => Observable<IResponseFormat>;
+  sort?: IConfigTableSort;
   pagination?: ConfigTablePagination;
   actions?: IConfigTableAction[];
 }
@@ -35,9 +36,22 @@ export interface IConfigTablePagination {
   pageSize?: number;
 }
 
+export interface IPagConstructor {
+  limits?: number[];
+  pageSize?: number;
+  records?: number;
+}
+
 export type ConfigTablePagination = boolean | IConfigTablePagination;
 
 export interface IConfigTableAction {
   label: string;
   click: (row: IPhoneData) => void;
+}
+
+export type DirectionKinds = 'asc' | 'desc';
+
+export interface IConfigTableSort {
+  column: string;
+  direction: DirectionKinds;
 }

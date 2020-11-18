@@ -15,7 +15,7 @@ export class PagTableService implements OnDestroy {
 
   private _fetch$ = new Subject<void>();
 
-  private destroy$ = new ReplaySubject<number>(1);
+  private _destroy$ = new ReplaySubject<number>(1);
 
   private _config: IConfigFormat;
 
@@ -26,8 +26,8 @@ export class PagTableService implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next(null);
-    this.destroy$.complete();
+    this._destroy$.next(null);
+    this._destroy$.complete();
   }
 
   public get paginator(): Pagination {
@@ -38,10 +38,10 @@ export class PagTableService implements OnDestroy {
     return this._dataOfFetch$.asObservable();
   }
 
+
   public setConfig(value: IConfigFormat): void {
     this._config = value;
-    this._initPaginator(this._config.pagination);
-    this._fetch$.next();
+    this._initPaginator(value.pagination);
   }
 
   private _initPaginator(params?: ConfigTablePagination): void {
@@ -54,13 +54,17 @@ export class PagTableService implements OnDestroy {
 
       this._paginator = new Pagination(parameters);
       this._listenPagChanges();
+      this._listenFetch();
+      this._fetch$.next();
+    } else {
+      this._sendAllFetchData();
     }
   }
 
   private _listenPagChanges(): void {
-    this._paginator?.change$
+    this._paginator.change$
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntil(this._destroy$),
       )
       .subscribe(() => {
         this._fetch$.next();
@@ -82,12 +86,36 @@ export class PagTableService implements OnDestroy {
             return this._config.fetch(query as IQueryParams);
           },
         ),
-        takeUntil(this.destroy$),
+        takeUntil(this._destroy$),
       )
       .subscribe((response: IResponseFormat) => {
         this._dataOfFetch$.next(response.data);
-        this.paginator.updatePagInfo(response.paging);
+        if (this.paginator) {
+          this.paginator.updatePagInfo(response.paging);
+        }
       });
+  }
+
+  private _sendAllFetchData(): void {
+    this._config.fetch({ page: 1, pageSize: 1 })
+      .pipe(
+        switchMap(
+          (response: IResponseFormat) => {
+            const records = response.paging.records;
+
+            return this._config.fetch({
+              page: 1,
+              pageSize: records,
+            });
+          },
+        ),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(
+        (response: IResponseFormat) => {
+          this._dataOfFetch$.next(response.data);
+        },
+      );
   }
 
 }

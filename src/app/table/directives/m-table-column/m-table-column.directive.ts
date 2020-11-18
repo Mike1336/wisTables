@@ -20,8 +20,16 @@ export class MTableColumnDirective {
     return this.tableRow.templateRef;
   }
 
-  public get title(): unknown {
+  public get titleContent(): unknown {
     return this.columnTitle?.templateRef;
+  }
+
+  public get sort(): boolean {
+    return this.columnTitle.sort;
+  }
+
+  public get title(): unknown {
+    return this.columnTitle?.value;
   }
 
 }

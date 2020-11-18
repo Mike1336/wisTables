@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { SortTableService } from './services/sort-table.service';
 import { PhoneStoreService } from './services/phone-store.service';
 import { PagTableService } from './services/pag-table.service';
 import { MTableComponent } from './components/m-table/m-table.component';
@@ -11,6 +12,7 @@ import { MTableColumnDirective } from './directives/m-table-column/m-table-colum
 import { MTableColumnTitleDirective } from './directives/m-table-column-title/m-table-column-title.directive';
 import { MTablePaginatorComponent } from './components/m-table-paginator/m-table-paginator.component';
 import { MTableRowActionsComponent } from './components/m-table-row-actions/m-table-row-actions.component';
+import { MTablePaginatorContainer } from './containers/m-table-paginator/m-table-paginator.container';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { MTableRowActionsComponent } from './components/m-table-row-actions/m-ta
     MTableColumnTitleDirective,
     MTablePaginatorComponent,
     MTableRowActionsComponent,
+    MTablePaginatorContainer,
   ],
   imports: [
     CommonModule,
@@ -35,6 +38,7 @@ import { MTableRowActionsComponent } from './components/m-table-row-actions/m-ta
   providers: [
     PagTableService,
     PhoneStoreService,
+    SortTableService,
   ],
 })
 export class TableModule {}

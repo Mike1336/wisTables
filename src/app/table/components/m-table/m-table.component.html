@@ -3,10 +3,35 @@
     <thead>
       <tr>
         <ng-container *ngFor="let column of columns">
-          <ng-container *ngIf="column.title; else emptyTitle">
-            <th>
-              <ng-template [ngTemplateOutlet]="column.title"> </ng-template>
-            </th>
+          <ng-container *ngIf="column.titleContent; else emptyTitle">
+
+            <ng-container *ngIf="config.sort.column === column.title; else withoutConfigSort">
+              <th>
+                <ng-template [ngTemplateOutlet]="column.titleContent"></ng-template>
+                <ng-container *ngIf="config.sort.direction === 'asc'; else desc">
+                  <span class="icon-arrow-up2" (click)="onSortClick($event, column.title)"></span>
+                </ng-container>
+                <ng-template #desc>
+                  <span class="icon-arrow-down2" (click)="onSortClick($event, column.title)"></span>  
+                </ng-template>
+              </th>
+            </ng-container>
+
+            <ng-template #withoutConfigSort>
+              <ng-container *ngIf="column.sort; else withoutSort">
+                <th>
+                  <ng-template [ngTemplateOutlet]="column.titleContent"></ng-template>
+                  <span (click)="onSortClick($event, column.title)"></span>
+                </th>
+                </ng-container>
+                <ng-template #withoutSort>
+                  <th>
+                    <ng-template [ngTemplateOutlet]="column.titleContent"></ng-template>
+                  </th>
+               </ng-template>
+            </ng-template>
+             
+       
           </ng-container>
           <ng-template #emptyTitle>
             <th></th>
@@ -15,7 +40,7 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let phone of data$ | async">
+      <ng-container *ngFor="let phone of data">
         <tr>
           <ng-container *ngFor="let column of columns">
             <td>
@@ -27,7 +52,10 @@
             </td>
           </ng-container>
           <ng-container *ngIf="config.actions">
-            <m-table-row-actions [row]="phone" [actions]="config.actions"></m-table-row-actions>
+            <m-table-row-actions
+              [row]="phone"
+              [actions]="config.actions"
+            ></m-table-row-actions>
           </ng-container>
         </tr>
       </ng-container>

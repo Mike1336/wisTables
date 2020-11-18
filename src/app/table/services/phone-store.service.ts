@@ -101,7 +101,7 @@ export class PhoneStoreService {
         offset,
       },
     })
-    .pipe(
+      .pipe(
       delay(1000),
     );
   }

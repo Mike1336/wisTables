@@ -23,6 +23,10 @@ export class AppComponent implements OnInit {
       fetch: (query: IQueryParams) => {
         return this.phoneStoreService.getPhones(query);
       },
+      sort: {
+        column: 'Name',
+        direction: 'asc',
+      },
       pagination: {
         limits: [1, 2, 5, 10, 12],
         pageSize: 10,

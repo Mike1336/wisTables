@@ -1,24 +1,30 @@
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 
-import { IConfigTablePagination, IQueryParams, IResponsePaging } from './../interfaces/response-format';
+import { IQueryParams, IResponsePaging, IPagConstructor } from './../interfaces/response-format';
 
 export class Pagination {
 
   private _change$ = new Subject<IQueryParams>();
+  private _init$ = new BehaviorSubject<boolean>(false);
 
-  private _records = 0;
-  private _limit: number;
-  private _offset: number;
   private _currentPage = 1;
-  private _limits: number[];
+  private _limit = 1;
+  private _limits = [1, 5, 10];
+  private _records = 0;
+  private _offset: number;
 
-  constructor(info?: IConfigTablePagination) {
-    this._limits = info?.limits ?? [1, 5, 10];
-    this._limit = info?.pageSize ?? 1;
+  constructor(info?: IPagConstructor) {
+    this._limits = info?.limits;
+    this._limit = info?.pageSize;
+    this._records = info.records;
   }
 
   public get change$(): Observable<IQueryParams> {
     return this._change$.asObservable();
+  }
+
+  public get init$(): Observable<boolean> {
+    return this._init$.asObservable();
   }
 
   public get query(): any {
@@ -46,7 +52,7 @@ export class Pagination {
 
   public setLimit(value: number): void {
     this._limit = value;
-    this.changeCurrentPage(1);
+    this.setChange();
   }
 
   public updatePagInfo(info: IResponsePaging): void {
@@ -54,12 +60,10 @@ export class Pagination {
     this._limit = info.limit;
     this._offset = info.offset;
 
-    this.changeCurrentPage(this.currentPage);
+    this._init$.next(true);
   }
 
-  public changeCurrentPage(value: number): void {
-    this._currentPage = value;
-
+  public setChange(): void {
     this._change$.next({
       page: this._currentPage,
       pageSize: this._limit,
@@ -70,28 +74,29 @@ export class Pagination {
   public increase(): void {
     if (this._currentPage < this.pages) {
       this._currentPage ++;
-      this.changeCurrentPage(this._currentPage);
+      this.setChange();
     }
   }
 
   public decrease(): void {
     if (this._currentPage > 1) {
       this._currentPage --;
-      this.changeCurrentPage(this._currentPage);
+      this.setChange();
     }
   }
 
   public reset(): void {
-    this.changeCurrentPage(1);
+    this.setChange();
   }
 
   public goToPage(page: number): void {
-    this.changeCurrentPage(page);
+    this._currentPage = page;
+    this.setChange();
   }
 
   public goToLastPage(): void {
-    const lastPageNumber = this._records / this._limit;
-    this.changeCurrentPage(lastPageNumber);
+    this._currentPage = this._records / this._limit;
+    this.setChange();
   }
 
 }
