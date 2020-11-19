@@ -5,7 +5,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { SortTableService } from './services/sort-table.service';
 import { PhoneStoreService } from './services/phone-store.service';
-import { PagTableService } from './services/pag-table.service';
+import { TableService } from './services/table.service';
 import { MTableComponent } from './components/m-table/m-table.component';
 import { MTableCellDirective } from './directives/m-table-cell/m-table-cell.directive';
 import { MTableColumnDirective } from './directives/m-table-column/m-table-column.directive';
@@ -36,7 +36,7 @@ import { MTablePaginatorContainer } from './containers/m-table-paginator/m-table
     MTablePaginatorComponent,
   ],
   providers: [
-    PagTableService,
+    TableService,
     PhoneStoreService,
     SortTableService,
   ],

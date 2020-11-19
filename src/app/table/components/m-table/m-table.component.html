@@ -1,41 +1,52 @@
 <div>
+  <div id="spinner" [ngClass]="{ show: loading$ | async }">
+    <div class="spinner-border text-success" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
   <table [ngClass]="{ withPaginator: config.pagination }">
     <thead>
       <tr>
         <ng-container *ngFor="let column of columns">
           <ng-container *ngIf="column.titleContent; else emptyTitle">
 
-            <ng-container *ngIf="config.sort.column === column.title; else withoutConfigSort">
-              <th>
-                <ng-template [ngTemplateOutlet]="column.titleContent"></ng-template>
-                <ng-container *ngIf="config.sort.direction === 'asc'; else desc">
-                  <span class="icon-arrow-up2" (click)="onSortClick($event, column.title)"></span>
-                </ng-container>
-                <ng-template #desc>
-                  <span class="icon-arrow-down2" (click)="onSortClick($event, column.title)"></span>  
-                </ng-template>
-              </th>
-            </ng-container>
-
-            <ng-template #withoutConfigSort>
-              <ng-container *ngIf="column.sort; else withoutSort">
-                <th>
-                  <ng-template [ngTemplateOutlet]="column.titleContent"></ng-template>
-                  <span (click)="onSortClick($event, column.title)"></span>
+            <ng-container *ngIf="isSortableColumn(column.title); else noSort">
+              <ng-container *ngIf="selectedColumn?.column === column.title; else didntSelect">
+                <th (click)="setSortColumn(column.title)">
+                  <ng-template
+                    [ngTemplateOutlet]="column.titleContent"
+                  ></ng-template>
+                  <ng-container *ngIf="selectedColumn?.direction === 'asc'; else desc">
+                    <span class="icon-arrow-up2"></span>
+                  </ng-container>
+                  <ng-template #desc>
+                    <span class="icon-arrow-down2"></span>
+                  </ng-template>
                 </th>
-                </ng-container>
-                <ng-template #withoutSort>
-                  <th>
-                    <ng-template [ngTemplateOutlet]="column.titleContent"></ng-template>
-                  </th>
-               </ng-template>
+              </ng-container>
+
+              <ng-template #didntSelect>
+                <th (click)="setSortColumn(column.title)">
+                  <ng-template
+                    [ngTemplateOutlet]="column.titleContent"
+                  ></ng-template>
+                </th>
+              </ng-template>
+
+            </ng-container>
+            <ng-template #noSort>
+              <th>
+                <ng-template
+                  [ngTemplateOutlet]="column.titleContent"
+                ></ng-template>
+              </th>
             </ng-template>
-             
-       
+
           </ng-container>
           <ng-template #emptyTitle>
             <th></th>
           </ng-template>
+
         </ng-container>
       </tr>
     </thead>
@@ -61,6 +72,7 @@
       </ng-container>
     </tbody>
   </table>
+
   <ng-container *ngIf="config.pagination">
     <m-table-paginator></m-table-paginator>
   </ng-container>

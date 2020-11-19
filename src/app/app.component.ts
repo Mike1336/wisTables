@@ -21,11 +21,9 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     this.config = {
       fetch: (query: IQueryParams) => {
+        console.log(query);
+
         return this.phoneStoreService.getPhones(query);
-      },
-      sort: {
-        column: 'Name',
-        direction: 'asc',
       },
       pagination: {
         limits: [1, 2, 5, 10, 12],

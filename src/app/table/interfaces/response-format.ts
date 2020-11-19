@@ -20,6 +20,8 @@ export interface IResponsePaging {
 export interface IQueryParams {
   page: number;
   pageSize: number;
+  column?: string;
+  direction?: DirectionKinds;
   pages?: number;
   limits?: number[];
 }

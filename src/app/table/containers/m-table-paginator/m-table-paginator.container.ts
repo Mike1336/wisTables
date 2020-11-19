@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
 import { Pagination } from '../../pagination/pagination';
-import { PagTableService } from '../../services/pag-table.service';
+import { TableService } from '../../services/table.service';
 
 @Component({
   selector: 'm-table-paginator',
@@ -18,7 +18,7 @@ export class MTablePaginatorContainer implements OnInit, OnDestroy {
   private _destroy$ = new ReplaySubject<number>(1);
 
   constructor(
-    private _pagTableService: PagTableService,
+    private _pagTableService: TableService,
     private _cdRef: ChangeDetectorRef,
     ) { }
 

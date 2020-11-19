@@ -27,7 +27,7 @@ export class Pagination {
     return this._init$.asObservable();
   }
 
-  public get query(): any {
+  public get query(): IQueryParams {
     return {
       page: this.currentPage,
       pageSize: this.pageSize,
@@ -52,6 +52,7 @@ export class Pagination {
 
   public setLimit(value: number): void {
     this._limit = value;
+    this._currentPage = 1;
     this.setChange();
   }
 

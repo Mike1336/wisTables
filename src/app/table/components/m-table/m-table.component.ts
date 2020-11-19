@@ -7,16 +7,17 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
   ChangeDetectorRef,
+  AfterContentInit,
 } from '@angular/core';
 
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
 
 import { SortTableService } from '../../services/sort-table.service';
+import { TableService } from '../../services/table.service';
 
-import { PagTableService } from './../../services/pag-table.service';
 import { IPhoneData } from './../../interfaces/phone-data';
-import { IConfigFormat } from './../../interfaces/response-format';
+import { IConfigFormat, IConfigTableSort } from './../../interfaces/response-format';
 import { MTableColumnDirective } from './../../directives/m-table-column/m-table-column.directive';
 
 @Component({
@@ -25,7 +26,7 @@ import { MTableColumnDirective } from './../../directives/m-table-column/m-table
   styleUrls: ['./m-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MTableComponent implements OnInit, OnDestroy {
+export class MTableComponent implements OnInit, AfterContentInit, OnDestroy {
 
   @Input()
   public config: IConfigFormat;
@@ -35,23 +36,42 @@ export class MTableComponent implements OnInit, OnDestroy {
 
   public data: object[];
 
+  public selectedColumn: IConfigTableSort;
+
+  public sortableColumns: string[];
+
   public showOptions: boolean;
+
+  public loading: boolean;
 
   private _destroy$ = new ReplaySubject<number>(1);
 
   constructor(
-    private _pagTableService: PagTableService,
+    private _tableService: TableService,
     private _sortTableService: SortTableService,
     private _cdRef: ChangeDetectorRef,
     ) { }
 
   public get data$(): Observable<IPhoneData[]> {
-    return this._pagTableService.dataFromFetch$;
+    return this._tableService.dataFromFetch$;
+  }
+
+  public get loading$(): Observable<boolean> {
+    return this._tableService.loading$;
+  }
+
+  public get selectedColumn$(): Observable<IConfigTableSort> {
+    return this._tableService.selectedSortColumn$;
   }
 
   public ngOnInit(): void {
-    this._pagTableService.setConfig(this.config);
-    this.initData();
+    this._tableService.setConfig(this.config);
+    this._initData();
+    this._initSorting();
+  }
+
+  public ngAfterContentInit(): void {
+    this.sortableColumns = this._tableService.getSortableColumns(this.columns);
   }
 
   public ngOnDestroy(): void {
@@ -59,7 +79,18 @@ export class MTableComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  public initData(): void {
+
+  public setSortColumn(name: string): void {
+    this._sortTableService.setColumn(name);
+  }
+
+  public isSortableColumn(name: string): boolean {
+    const index = this.sortableColumns.findIndex((column) => column === name);
+
+    return index > -1 ? true : false;
+  }
+
+  private _initData(): void {
     this.data$
       .pipe(
         takeUntil(this._destroy$),
@@ -67,40 +98,23 @@ export class MTableComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: object[]) => {
           this.data = data;
-          if (this.config.sort && data) {
-            this.data = this._sortTableService.getSortedData(
-              this.data,
-              this.config.sort.column.toLowerCase(),
-              this.config.sort.direction,
-              );
-          }
           this._cdRef.markForCheck();
         },
       );
   }
 
-  public onSortClick(event, columnTitle: string): void {
-    const target = event.currentTarget;
-    const classList = target.classList;
-
-    if (classList.contains('icon-arrow-up2')) {
-      classList.remove('icon-arrow-up2');
-      classList.add('icon-arrow-down2');
-      this.data = this._sortTableService.getSortedData(
-        this.data,
-        columnTitle.toLowerCase(),
-        'desc',
-        );
-    } else {
-      classList.add('icon-arrow-up2');
-      classList.remove('icon-arrow-down2');
-      this.data = this._sortTableService.getSortedData(
-        this.data,
-        columnTitle.toLowerCase(),
-        'asc',
-        );
-    }
-
+  private _initSorting(): void {
+    this.selectedColumn$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(
+        (data: IConfigTableSort) => {
+          this.selectedColumn = data;
+          this._cdRef.markForCheck();
+        },
+      );
   }
+
 
 }

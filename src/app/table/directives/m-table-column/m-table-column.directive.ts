@@ -25,10 +25,10 @@ export class MTableColumnDirective {
   }
 
   public get sort(): boolean {
-    return this.columnTitle.sort;
+    return this.columnTitle?.sort;
   }
 
-  public get title(): unknown {
+  public get title(): string {
     return this.columnTitle?.value;
   }
 
